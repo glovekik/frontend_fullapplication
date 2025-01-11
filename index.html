@@ -30,6 +30,8 @@
                     body: JSON.stringify({ link, media_type: mediaType })
                 });
 
+                console.log('Response status:', response.status); // Debugging: log status code
+
                 if (response.ok) {
                     const result = await response.json();
 
