@@ -92,6 +92,24 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Status message */
+        #statusMessage {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        /* Error Styles */
+        .error {
+            color: #e74c3c;
+        }
+
+        /* Success Styles */
+        .success {
+            color: #2ecc71;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.5rem;
@@ -119,9 +137,16 @@
     <!-- Loading Spinner -->
     <div id="loadingSpinner" class="spinner"></div>
 
+    <!-- Status Message -->
+    <div id="statusMessage"></div>
+
     <script>
         async function handleDownload(mediaType) {
             const link = document.getElementById('link').value;
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Clear any previous status messages
+            statusMessage.textContent = '';
 
             if (!link) {
                 alert("Please enter a YouTube video URL.");
@@ -130,6 +155,7 @@
 
             // Show the spinner
             document.getElementById('loadingSpinner').style.display = 'block';
+            statusMessage.textContent = 'Downloading...';
 
             try {
                 const response = await fetch('https://web-production-be638.up.railway.app/download', {
@@ -154,13 +180,22 @@
                     document.body.removeChild(a);
 
                     window.URL.revokeObjectURL(url);
+
+                    // Display success message
+                    statusMessage.textContent = 'Download completed successfully!';
+                    statusMessage.classList.remove('error');
+                    statusMessage.classList.add('success');
                 } else {
                     const error = await response.json();
-                    alert(`Error: ${error.error}`);
+                    statusMessage.textContent = `Error: ${error.error}`;
+                    statusMessage.classList.remove('success');
+                    statusMessage.classList.add('error');
                 }
             } catch (error) {
                 console.error("Error fetching download:", error);
-                alert("Failed to fetch download. Is the backend running?");
+                statusMessage.textContent = "Failed to fetch download. Is the backend running?";
+                statusMessage.classList.remove('success');
+                statusMessage.classList.add('error');
             }
 
             // Hide the spinner after download attempt
