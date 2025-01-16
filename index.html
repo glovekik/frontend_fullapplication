@@ -23,7 +23,9 @@
             font-size: 2.5rem;
             margin-bottom: 20px;
             text-align: center;
-            color: #ffffff;
+            background: linear-gradient(to right, #aaa, #ddd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         input {
@@ -47,10 +49,15 @@
             box-shadow: 0 0 10px #555;
         }
 
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
         button {
             width: 150px;
             padding: 12px;
-            margin: 10px;
             border: none;
             border-radius: 25px;
             background: linear-gradient(145deg, #1c1c1c, #333);
@@ -59,16 +66,41 @@
             cursor: pointer;
             box-shadow: 4px 4px 10px #0d0d0d, -4px -4px 10px #292929;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff7300, #ffeb00, #47ff00, #00ffee, #2a6bff, #9900ff);
+            transition: transform 0.3s ease;
+            background-size: 300%;
+            z-index: 0;
+        }
+
+        button:hover::before {
+            left: 0;
+            animation: disco 1.5s infinite linear;
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
         }
 
         button:hover {
-            background: linear-gradient(145deg, #333, #1c1c1c);
             color: #fff;
-            box-shadow: 6px 6px 15px #0d0d0d, -6px -6px 15px #292929;
         }
 
-        button:active {
-            transform: scale(0.95);
+        @keyframes disco {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @media (max-width: 768px) {
@@ -90,8 +122,10 @@
 <body>
     <h1>YouTube Downloader</h1>
     <input type="text" id="link" placeholder="Enter YouTube video URL" />
-    <button id="downloadVideoBtn">Download Video</button>
-    <button id="downloadAudioBtn">Download Audio</button>
+    <div class="button-container">
+        <button id="downloadVideoBtn"><span>Download Video</span></button>
+        <button id="downloadAudioBtn"><span>Download Audio</span></button>
+    </div>
 
     <script>
         async function handleDownload(mediaType) {
