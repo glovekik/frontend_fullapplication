@@ -10,8 +10,8 @@
             margin: 0;
             padding: 0;
             background-color: #000; /* Black background */
-            color: #c0c0c0; /* Silver text */
-            font-family: 'Arial', sans-serif;
+            color: #fff; /* White text for contrast */
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,92 +20,81 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
+            color: #fff;
             margin-bottom: 20px;
+            font-weight: 600;
             text-align: center;
-            background: linear-gradient(to right, #aaa, #ddd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         input {
             width: 100%;
             max-width: 400px;
-            padding: 12px;
-            border: none;
-            border-radius: 25px;
-            background: #333;
-            color: #c0c0c0;
-            font-size: 1rem;
+            padding: 15px;
             margin-bottom: 20px;
-            text-align: center;
+            border-radius: 12px;
+            border: 1px solid #444;
+            font-size: 1rem;
+            background-color: #222;
+            color: #fff;
             outline: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         input:focus {
-            background: #444;
-            color: #fff;
-            box-shadow: 0 0 10px #555;
+            border-color: #007aff; /* Blue border color on focus */
+            box-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
         }
 
+        /* Button Styles */
         .button-container {
             display: flex;
-            gap: 15px;
+            gap: 15px; /* Space between buttons */
             justify-content: center;
         }
 
         button {
             width: 150px;
-            padding: 12px;
+            padding: 15px;
             border: none;
-            border-radius: 25px;
-            background: linear-gradient(145deg, #1c1c1c, #333);
-            color: #c0c0c0;
+            border-radius: 12px;
+            background-color: #007aff; /* iPhone blue button */
+            color: #fff;
             font-size: 1rem;
             cursor: pointer;
-            box-shadow: 4px 4px 10px #0d0d0d, -4px -4px 10px #292929;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff0000, #ff7300, #ffeb00, #47ff00, #00ffee, #2a6bff, #9900ff);
-            transition: transform 0.3s ease;
-            background-size: 300%;
-            z-index: 0;
-        }
-
-        button:hover::before {
-            left: 0;
-            animation: disco 1.5s infinite linear;
-        }
-
-        button span {
-            position: relative;
-            z-index: 1;
         }
 
         button:hover {
-            color: #fff;
+            background-color: #0051a8; /* Darker blue on hover */
         }
 
-        @keyframes disco {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        button:active {
+            background-color: #003e7c; /* Even darker blue on active */
+        }
+
+        /* Spinner Styles */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007aff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
             input {
@@ -113,7 +102,7 @@
             }
 
             button {
-                width: 140px;
+                width: 130px;
                 font-size: 0.9rem;
             }
         }
@@ -123,9 +112,12 @@
     <h1>YouTube Downloader</h1>
     <input type="text" id="link" placeholder="Enter YouTube video URL" />
     <div class="button-container">
-        <button id="downloadVideoBtn"><span>Download Video</span></button>
-        <button id="downloadAudioBtn"><span>Download Audio</span></button>
+        <button id="downloadVideoBtn">Download Video</button>
+        <button id="downloadAudioBtn">Download Audio</button>
     </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="spinner"></div>
 
     <script>
         async function handleDownload(mediaType) {
@@ -135,6 +127,9 @@
                 alert("Please enter a YouTube video URL.");
                 return;
             }
+
+            // Show the spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
 
             try {
                 const response = await fetch('https://web-production-be638.up.railway.app/download', {
@@ -167,6 +162,9 @@
                 console.error("Error fetching download:", error);
                 alert("Failed to fetch download. Is the backend running?");
             }
+
+            // Hide the spinner after download attempt
+            document.getElementById('loadingSpinner').style.display = 'none';
         }
 
         document.getElementById('downloadVideoBtn').addEventListener('click', () => handleDownload('video'));
