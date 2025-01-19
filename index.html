@@ -21,7 +21,6 @@
 
         h1 {
             font-size: 2rem;
-            color: #fff;
             margin-bottom: 20px;
             font-weight: 600;
             text-align: center;
@@ -47,7 +46,6 @@
             box-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
         }
 
-        /* Button Styles */
         .button-container {
             display: flex;
             gap: 15px;
@@ -126,7 +124,6 @@
                 return;
             }
 
-            // Show the spinner
             document.getElementById('loadingSpinner').style.display = 'block';
 
             try {
@@ -144,7 +141,6 @@
                     const a = document.createElement('a');
                     a.style.display = 'none';
                     a.href = url;
-
                     a.download = mediaType === 'audio' ? 'audio.mp3' : 'video.mp4';
                     document.body.appendChild(a);
                     a.click();
